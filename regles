@@ -1,0 +1,10 @@
+SRC=rpg.c perso.c adversaire.c
+SRCH=perso.h adversaire.h
+OBJ=$(SRC: .c = .o)
+
+jeu: $(OBJ)
+	cc -o jeu $(OBJ) $(SRCH)
+
+%.o: %.c
+	cc -c $< -o $@
+	
