@@ -5,6 +5,7 @@
 #include <time.h>
 
 #define MAX 20
+#define MIN 1
 
 #include "perso.h"
 #include "adversaire.h"
@@ -12,18 +13,18 @@
 int tirageAlea(){
 	srand(time(NULL));
 	
-	return (rand() % MAX);
+	return (rand() % (MAX + 1 - MIN)) + MIN;;
 }
 
 void messagePause(char message[], int tirage){
 	if (tirage >= 0)
 	{
-		printf("%s %d \n(entrez espace pour continuez)", message, tirage);
+		printf("%s %d \n(\"entrer\" pour continuez)\n", message, tirage);
 	}else {
-		printf("%s \n(entrez espace pour continuez)", message);
+		printf("%s \n(\"entrer\" pour continuez)\n", message);
 	}
 	while(1){
-		if(getchar()==32) break;//27==esc
+		if(getchar()==10 || getchar()==13) break;//32==esp
 	}
 }
 
@@ -36,36 +37,56 @@ int attaque(perso_s *personnage, adversaire_s *adversaire){
 
 	int tirageMonAdv	= tirageAlea();
 
-
-	if (tirageMonAdv > adversaire->caract.dexterite)
+	if (tirageMonPerso == MAX)
 	{
 		/* code */
-		if (tirageMonAdv == 20)
-		{
-			/* code */
-			messagePause("Ton adversaire a totalement raté...", -1);
-			return tirageAlea() * 3;
-		}
-		if (tirageMonPerso < personnage->caract.dexterite)
-		{
-			/* code */
-			messagePause("Ton adversaire a esquivé...", -1);
-			return 0;
-		}
-		messagePause("Tu as touché ton adversaire", -1);
-		return tirageAlea() * 1.5;
+		messagePause("Tu as raté totalement...", -1);
+		personnage->pv -= 10;
+		return 0;
 	}
-	messagePause("Tu as touché ton adversaire", -1);
+	if (tirageMonAdv == MAX)
+	{
+		/* code */
+		messagePause("Ton adversaire a totalement raté...", -1);
+		return personnage->caract.force * 3;
+	}
+	if (tirageMonPerso == 0 && tirageMonAdv != 0)
+	{
+		/* code */
+		messagePause("Réussite critique...", -1);
+		return personnage->caract.force * 3;
+	}
+	if (tirageMonPerso != 0 && tirageMonAdv == 0)
+	{
+		/* code */
+		messagePause("Ton adversaire a esquivé...", -1);
+		return 0;
+	}
+	
 	int diffMonPerso = personnage->caract.dexterite - tirageMonPerso;
 	int diffMonAdv = adversaire->caract.dexterite - tirageMonAdv;
 	if (diffMonPerso > diffMonAdv)
 	{
 		/* code */
-		return tirageAlea() * 1;
+		messagePause("Tu as touché ton adversaire", -1);
+		return personnage->caract.force * 1;
 	}else {
-		return tirageAlea() * 0.5;
+		messagePause("Tu as raté ton adversaire...", -1);
+		return 0;
 	}
 }
+
+int defense(int degat, adversaire_s monAdversaire){
+	messagePause("Ton adversaire fait un jet de vitalite", -1);
+	
+	int tirageVitaAdver = tirageAlea();
+	if (1)
+	{
+		/* code */
+		printf(" coucou ");
+	}
+}
+
 int attaqueEnnemie(adversaire_s *adversaire, perso_s *personnage){
 	messagePause("Fais un jet de dexterite", -1);
 	
@@ -75,56 +96,72 @@ int attaqueEnnemie(adversaire_s *adversaire, perso_s *personnage){
 
 	int tirageMonAdv	= tirageAlea();
 
-
-	if (tirageMonPerso > personnage->caract.dexterite)
+	if (tirageMonPerso == MAX)
 	{
 		/* code */
-		if (tirageMonPerso == 20)
-		{
-			/* code */
-			messagePause("Tu as totalement raté...", -1);
-			return tirageAlea() * 3;
-		}
-		if (tirageMonPerso < personnage->caract.dexterite)
-		{
-			/* code */
-			messagePause("Tu as esquivé...", -1);
-			return 0;
-		}
-		messagePause("Tu as été touché par ton adversaire", -1);
-		return tirageAlea() * 1.5;
+		messagePause("Tu as raté totalement...", -1);
+		return adversaire->caract.force * 3;
+
 	}
-	messagePause("Tu as été touché par ton adversaire", -1);
+	if (tirageMonAdv == MAX)
+	{
+		/* code */
+		messagePause("Ton adversaire a totalement raté...", -1);
+		adversaire->pv -= 10;
+		return 0;	
+	}
+	if (tirageMonPerso == MIN && tirageMonAdv != MIN)
+	{
+		/* code */
+		messagePause("Réussite critique...", -1);
+		return 0;
+	}
+	if (tirageMonPerso != MIN && tirageMonAdv == MIN)
+	{
+		/* code */
+		messagePause("Ton adversaire est fort...", -1);
+		return adversaire->caract.force * 3;
+	}
 	int diffMonPerso = personnage->caract.dexterite - tirageMonPerso;
 	int diffMonAdv = adversaire->caract.dexterite - tirageMonAdv;
 	if (diffMonPerso > diffMonAdv)
 	{
 		/* code */
-		return tirageAlea() * 1;
+		messagePause("Tu as esquivé...", -1);
+		return 0;
 	}else {
-		return tirageAlea() * 0.5;
+		messagePause("Tu n'as pas esquivé...", -1);
+		return adversaire->caract.force * 1;
 	}
+}
+
+void choixUn(perso_s *monPerso, adversaire_s *monAdversaire){
+		/* code */
+	int degat = attaque(monPerso, monAdversaire);
+	messagePause("Il prend ", degat);
+	monAdversaire->pv = monAdversaire->pv - degat;
+
+	degat = attaqueEnnemie(monAdversaire, monPerso);
+	messagePause("Tu prend ", degat);
+	monPerso->pv = monPerso->pv - degat;
 }
 
 
 void combat(perso_s *monPerso, adversaire_s *monAdversaire){
-	while(monAdversaire->pv > 0 || monPerso->pv > 0){
-		int reponse;
+	int reponse;
+	while(monAdversaire->pv > 0 || monPerso->pv > 0 || reponse == 0){
 		printf("Veut tu attaquer ? 1 oui - 0 non\n");
 		scanf("%d", &reponse);
-		if (reponse != 0)
+		if (reponse == 0)
 		{
-			/* code */
-			int degat = attaque(monPerso, monAdversaire);
-			messagePause("Il prend ", degat);
-			monAdversaire->pv = monAdversaire->pv - degat;
-
-			degat = attaqueEnnemie(monAdversaire, monPerso);
-			messagePause("Tu prend ", degat);
-			monPerso->pv = monPerso->pv - degat;
-		} else {
 			break;
 		}
+		switch(reponse)
+	   	{
+		   	case 1 : choixUn(monPerso, monAdversaire); break;
+		   	case 2 : printf("WIP\n"); break;
+		   	default : printf("erreur interne du logiciel numéro xx\n");
+	   	}
 	}
 	//monPerso.pv -= attaque(&monAdversaire, &monPerso);
 }
