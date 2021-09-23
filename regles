@@ -1,5 +1,5 @@
-SRC=rpg.c perso.c adversaire.c
-SRCH=perso.h adversaire.h
+SRC=rpg.c perso.c adversaire.c combat.c
+SRCH=perso.h adversaire.h combat.h
 OBJ=$(SRC: .c = .o)
 
 jeu: $(OBJ)
