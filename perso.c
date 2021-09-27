@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <time.h>
-
-#include "perso.h"
+#include "include.h"
 
 #define MAX 15
 #define NBSTATS 5
