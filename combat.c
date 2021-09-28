@@ -210,7 +210,7 @@ void voirVie(perso_s *personnage, adversaire_s *adversaire){
 }
 
 void combat(perso_s *monPerso, adversaire_s *monAdversaire){
-		printf("Bonjour %s. Votre premier adversaire est : \n", monPerso.prenom);
+	printf("Bonjour %s. Votre premier adversaire est : \n", monAdversaire->prenom);
 	int reponse;
 	int result = 0;
 	while(monAdversaire->pv > 0 || monPerso->pv > 0 || reponse == 0){
