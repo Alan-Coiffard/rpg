@@ -167,23 +167,42 @@ int attaqueEnnemie(adversaire_s *adversaire, perso_s *personnage){
 	}
 }
 
-void choixUn(perso_s *monPerso, adversaire_s *monAdversaire){
+int choixUn(perso_s *monPerso, adversaire_s *monAdversaire){
 		/* code */ 
 	int degat = attaque(monPerso, monAdversaire);
 	messagePause("Il prend ", degat);
 	monAdversaire->pv = monAdversaire->pv - degat;
+	if (monAdversaire->pv <= 0)
+	{
+		/* code */
+		messagePause("Bien joué, tu viens de battre ton premier adversaire !", -1);
+		return -1;
+	}
+
 
 	degat = attaqueEnnemie(monAdversaire, monPerso);
 	messagePause("Tu prend ", degat);
 	monPerso->pv = monPerso->pv - degat;
+	if (monPerso->pv <= 0)
+	{
+		/* code */
+		messagePause("You died !", -1);
+		return -1;
+	}
 }
 
-void choixDeux(perso_s *monPerso, adversaire_s *monAdversaire){
+int choixDeux(perso_s *monPerso, adversaire_s *monAdversaire){
 	soins(monPerso);
 
 	int degat = attaqueEnnemie(monAdversaire, monPerso);
 	messagePause("Tu prend ", degat);
 	monPerso->pv = monPerso->pv - degat;
+	if (monPerso->pv <= 0)
+	{
+		/* code */
+		messagePause("You died !", -1);
+		return -1;
+	}
 }
 
 void voirVie(perso_s *personnage, adversaire_s *adversaire){
@@ -192,24 +211,30 @@ void voirVie(perso_s *personnage, adversaire_s *adversaire){
 
 void combat(perso_s *monPerso, adversaire_s *monAdversaire){
 	int reponse;
+	int result = 0;
 	while(monAdversaire->pv > 0 || monPerso->pv > 0 || reponse == 0){
 		printf("\033[H\033[2J");
+		if (result == -1)
+		{
+			/* code */
+			break;
+		}
 		voirVie(monPerso, monAdversaire);
 		printf("Actions : \n");
 		printf(" - Fuite 	-> 0\n");
 		printf(" - Attaque 	-> 1\n");
 		printf(" - Soin 	-> 2\n");
 		scanf("%d", &reponse);
+		printf("%d\n", result);
 		if (reponse == 0)
 		{
 			break;
 		}
 		switch(reponse)
 	   	{
-		   	case 1 : choixUn(monPerso, monAdversaire); break;
-		   	case 2 : choixDeux(monPerso, monAdversaire); break;
+		   	case 1 : result = choixUn(monPerso, monAdversaire); break;
+		   	case 2 : result = choixDeux(monPerso, monAdversaire); break;
 		   	default : printf("erreur interne du logiciel numéro %d invalide\n", reponse);
 	   	}
 	}
-	//monPerso.pv -= attaque(&monAdversaire, &monPerso);
 }

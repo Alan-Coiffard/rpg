@@ -8,8 +8,8 @@ int attaque(perso_s *personnage, adversaire_s *adversaire);
 void soins(perso_s *personnage);
 int attaqueEnnemie(adversaire_s *adversaire, perso_s *personnage);
 
-void choixUn(perso_s *monPerso, adversaire_s *monAdversaire);
-void choixDeux(perso_s *monPerso, adversaire_s *monAdversaire);
+int choixUn(perso_s *monPerso, adversaire_s *monAdversaire);
+int choixDeux(perso_s *monPerso, adversaire_s *monAdversaire);
 
 void voirVie(perso_s *personnage, adversaire_s *adversaire);
 

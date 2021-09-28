@@ -3,6 +3,10 @@
   
 #define BASEPV 100
 #define TAILLECHAINE 255
+#define POIDMAX 120
+
+#include "objet.h"
+#include "armes.h"
 
 struct caracteristiques {
 	int force, vigilence, inteligence, vitalite, dexterite;
@@ -14,6 +18,9 @@ struct perso {
 	char prenom[TAILLECHAINE];
 	caracteristiques_s caract;
 	int pv;
+	objet_s inventaire[200];
+	int tailleInventaire;
+	int poidInventaire;
 };
 
 typedef struct perso perso_s;
@@ -22,6 +29,6 @@ perso_s initPerso();
 
 void voirPerso(perso_s *personnage);
 
-
+int ajoutObjet(objet_s *objet, perso_s *perso);
 
 #endif
