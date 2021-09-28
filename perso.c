@@ -79,6 +79,17 @@ int ajoutObjet(objet_s *objet, perso_s *perso){
 	return 0;
 }
 
+void prendreArme(perso_s *perso, armes_s *arme){
+	int reponse;
+	printf("Voulez-vous prendre l'arme suivante ? (0 - non | 1 - oui)\n");
+	afficherArmes(arme);
+	scanf("%d", &reponse);
+	if (reponse == 1)
+	{
+		perso->arme = ajouterArme(arme);
+	}
+}
+
 void afficheTableau(int stats[]){
 	for (int i = 0; i < NBSTATS; ++i)
 	{
@@ -139,6 +150,7 @@ void distribStats(caracteristiques_s *cara, int tirage[]){
 
 }
 
+
 void voirPerso(perso_s *perso){
 	printf("Nom : %s - Prenom : %s - vie : %d\n", perso->nom, perso->prenom, perso->pv);
 	printf("Stats :\n");
@@ -148,6 +160,7 @@ void voirPerso(perso_s *perso){
 	printf(" - Vitalite : %d\n", perso->caract.vitalite);
 	printf(" - Dexterite : %d\n", perso->caract.dexterite);
 	voirInventaire(perso);
+	afficherArmes(&perso->arme);
 }
 
 int aleatoire(int min, int max){
@@ -170,6 +183,9 @@ perso_s initPerso(){
 	personnage.tailleInventaire = 0;
 	personnage.poidInventaire = 0;
 
+	//armes_s monArme = creerArme("", 0, 0, 0, 0);
+
+	personnage.arme = creerArme("poings", 0, 0, 0, 0);
 
 	printf("Quel est votre prenom ?\n");
 	scanf("%s", personnage.prenom);

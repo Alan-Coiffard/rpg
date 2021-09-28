@@ -21,6 +21,7 @@ struct perso {
 	objet_s inventaire[200];
 	int tailleInventaire;
 	int poidInventaire;
+	armes_s arme;
 };
 
 typedef struct perso perso_s;
@@ -30,5 +31,9 @@ perso_s initPerso();
 void voirPerso(perso_s *personnage);
 
 int ajoutObjet(objet_s *objet, perso_s *perso);
+
+armes_s ajouterArme(armes_s *arme);
+
+void prendreArme(perso_s *perso, armes_s *arme);
 
 #endif

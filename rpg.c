@@ -17,7 +17,7 @@ void start(){
 	clear();
 	//voirAdversaire(&monAdversaire);
 	//printf("\n");
-	combat(&monPerso, &monAdversaire);
+	//combat(&monPerso, &monAdversaire);
 	//voirPerso(&monPerso);
 	//voirAdversaire(&monAdversaire);
 	
@@ -29,9 +29,14 @@ void start(){
 	voirPerso(&monPerso);
 	ajoutObjet(&lourdObjet, &monPerso);
 	voirPerso(&monPerso);
+
 //arme(char nom[], int poid, int dureeVie, int degats, int distance);
-/*
+
 	armes_s monArme = creerArme("épée", 5, 50, 25, 0);
+	prendreArme(&monPerso, &monArme);
+		voirPerso(&monPerso);
+
+/*
 	afficherArmes(&monArme);
 	armes_s monArme2 = creerArme("arc", 5, 50, 25, 1);
 	afficherArmes(&monArme2);
