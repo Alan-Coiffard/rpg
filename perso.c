@@ -20,7 +20,7 @@ int calculPoidInventaire(perso_s *perso){
 	for (int i = 0; i < tailleInventaire; ++i)
 	{
 		/* code */
-		poid = perso->inventaire[i].poid;
+		poid += perso->inventaire[i].poid;
 	}
 	return poid;
 }
