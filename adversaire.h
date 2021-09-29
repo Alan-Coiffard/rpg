@@ -19,7 +19,7 @@ struct adversaire {
 
 typedef struct adversaire adversaire_s;
 
-adversaire_s initAdversaire();
+adversaire_s initAdversaire(char nom[], char prenom[]);
 
 void voirAdversaire(adversaire_s *adversaire);
 
